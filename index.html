@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Language Translator</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 90%;
+      margin: auto;
+      padding: 20px;
+      background: white;
+      min-height: 100vh;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    /* Change the button color to blue */
+    button {
+      background-color: #007bff; /* Blue color */
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Change the button hover color to a darker blue */
+    button:hover {
+      background-color: #0056b3; /* Darker blue */
+    }
+
+    .label {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .box {
+      padding: 12px;
+      background: #e9ecef;
+      border-radius: 5px;
+      margin-top: 10px;
+      word-wrap: break-word;
+    }
+
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 20px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      textarea, select, button {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Screen -->
+  <div id="welcomePage" class="container">
+    <h2>🌍 Welcome to the All Language Translator!</h2>
+    <p>Welcome to our translation tool, where you can translate text between a wide range of languages.</p>
+    <button onclick="startTranslator()">Start Translator</button>
+  </div>
+
+  <!-- Input Page for Translator -->
+  <div class="container" id="inputPage" style="display: none;">
+    <h2>🌍 ALL LANGUAGE TRANSLATOR</h2>
+    
+    <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+
+    <label class="label">From Language:</label>
+    <select id="fromLang"></select>
+
+    <label class="label">To Language:</label>
+    <select id="toLang"></select>
+
+    <button onclick="goToResult()">Translate</button>
+  </div>
+
+  <!-- Result Page -->
+  <div class="container" id="resultPage" style="display: none;">
+    <h2>✅ Translation Result</h2>
+
+    <div class="label">Original Text:</div>
+    <div class="box" id="originalText"></div>
+
+    <div class="label">Translated Text:</div>
+    <div class="box" id="translatedText">Translating...</div>
+
+    <button onclick="goBack()">🔙 Translate Another</button>
+  </div>
+
+  <script>
+    const languages = {
+      "en": "English", "gu": "Gujarati", "hi": "Hindi", "fr": "French",
+      "de": "German", "es": "Spanish", "ta": "Tamil", "te": "Telugu", "ur": "Urdu"
+    };
+
+    const fromLang = document.getElementById("fromLang");
+    const toLang = document.getElementById("toLang");
+
+    for (const key in languages) {
+      fromLang.innerHTML += `<option value="${key}">${languages[key]}</option>`;
+      toLang.innerHTML += `<option value="${key}">${languages[key]}</option>`;
+    }
+
+    fromLang.value = "en";
+    toLang.value = "gu";
+
+    function startTranslator() {
+      document.getElementById("welcomePage").style.display = "none";
+      document.getElementById("inputPage").style.display = "block";
+    }
+
+    function goToResult() {
+      const text = document.getElementById("inputText").value;
+      const from = fromLang.value;
+      const to = toLang.value;
+
+      if (!text.trim()) {
+        alert("Please enter some text!");
+        return;
+      }
+
+      document.getElementById("inputPage").style.display = "none";
+      document.getElementById("resultPage").style.display = "block";
+      document.getElementById("originalText").innerText = text;
+      document.getElementById("translatedText").innerText = "Translating...";
+
+      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("translatedText").innerText = data.responseData.translatedText;
+        })
+        .catch(() => {
+          document.getElementById("translatedText").innerText = "❌ Error translating!";
+        });
+    }
+
+    function goBack() {
+      document.getElementById("inputPage").style.display = "block";
+      document.getElementById("resultPage").style.display = "none";
+      document.getElementById("inputText").value = "";
+    }
+  </script>
+
+</body>
+</html>
