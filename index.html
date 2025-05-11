@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Language Translator</title>
 
-  <!-- ✅ Google Analytics Code -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KX6YBPRQPC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KX6YBPRQPC');
-  </script>
-
   <style>
     * { box-sizing: border-box; }
     body {
@@ -24,7 +15,7 @@
 
     .container {
       max-width: 600px;
-      width: 90%;
+      width: 100%;
       margin: auto;
       padding: 20px;
       background: white;
@@ -36,8 +27,9 @@
       font-size: 28px;
       margin-bottom: 20px;
       color: #333;
-      white-space: normal;
-      word-break: break-word;
+      white-space: nowrap;       /* ✅ No wrapping */
+      overflow: hidden;
+      text-overflow: ellipsis;   /* ✅ Ellipsis if too long */
     }
 
     textarea, select, button {
@@ -71,7 +63,7 @@
       background: #e9ecef;
       border-radius: 5px;
       margin-top: 10px;
-      word-wrap: break-word;
+      word-break: break-word;
     }
 
     @media (max-width: 768px) {
@@ -94,21 +86,27 @@
         padding: 10px;
       }
     }
+
+    @media (max-width: 360px) {
+      h2 {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>
 
   <!-- Welcome Screen -->
   <div id="welcomePage" class="container">
-    <h2>🌍 Welcome to the All Language Translator!</h2>
+    <h2>🌍 ALL LANGUAGE TRANSLATOR</h2>
     <p>Welcome to our translation tool, where you can translate text between a wide range of languages.</p>
     <button onclick="startTranslator()">Start Translator</button>
   </div>
 
-  <!-- Input Page for Translator -->
+  <!-- Input Page -->
   <div class="container" id="inputPage" style="display: none;">
     <h2>🌍 ALL LANGUAGE TRANSLATOR</h2>
-    
+
     <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
 
     <label class="label">From Language:</label>
